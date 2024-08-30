@@ -1,0 +1,214 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shellcode Search</title>
+    <link href="https://fonts.googleapis.com/css2?family=Diploma&display=swap" rel="stylesheet"> <!-- Diploma 글꼴 추가 -->
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            padding: 0;
+        }
+        #video-background {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1000;
+            object-fit: cover;
+        }
+        .content {
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 50px;
+            font-size: 4.5rem; /* 제목 크기 증가 */
+            font-family: 'Diploma', cursive; /* Diploma 글꼴 적용 */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* 가독성을 위한 그림자 추가 */
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        .custom-btn {
+            width: 200px;
+            height: 60px;
+            color: #000; /* 버튼 글자색을 검정으로 변경 */
+            border-radius: 5px;
+            padding: 10px 25px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700; /* 글자 두께 증가 */
+            font-size: 1.2rem;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 2px 2px 2px 0px rgba(255,255,255,.5),
+                        7px 7px 20px 0px rgba(0,0,0,.1),
+                        4px 4px 5px 0px rgba(0,0,0,.1);
+            outline: none;
+            text-decoration: none;
+        }
+        .btn-6 {
+            background: linear-gradient(90deg, #00FFFF, #00FF00); /* 밝은 형광색 그라데이션 */
+            line-height: 42px;
+            padding: 0;
+            border: none;
+        }
+        .btn-6 span {
+            position: relative;
+            display: flex;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-6:before,
+        .btn-6:after {
+            position: absolute;
+            content: "";
+            height: 0%;
+            width: 1px;
+            box-shadow:
+            -1px -1px 20px 0px rgba(255,255,255,1),
+            -4px -4px 5px 0px rgba(255,255,255,1),
+            7px 7px 20px 0px rgba(0,0,0,.4),
+            4px 4px 5px 0px rgba(0,0,0,.3);
+        }
+        .btn-6:before {
+            right: 0;
+            top: 0;
+            transition: all 500ms ease;
+        }
+        .btn-6:after {
+            left: 0;
+            bottom: 0;
+            transition: all 500ms ease;
+        }
+        .btn-6:hover{
+            background: transparent;
+            color: #00FFFF; /* 호버 시 글자색 변경 */
+            box-shadow: none;
+        }
+        .btn-6:hover:before {
+            transition: all 500ms ease;
+            height: 100%;
+        }
+        .btn-6:hover:after {
+            transition: all 500ms ease;
+            height: 100%;
+        }
+        .btn-6 span:before,
+        .btn-6 span:after {
+            position: absolute;
+            content: "";
+            box-shadow:
+            -1px -1px 20px 0px rgba(255,255,255,1),
+            -4px -4px 5px 0px rgba(255,255,255,1),
+            7px 7px 20px 0px rgba(0,0,0,.4),
+            4px 4px 5px 0px rgba(0,0,0,.3);
+        }
+        .btn-6 span:before {
+            left: 0;
+            top: 0;
+            width: 0%;
+            height: .5px;
+            transition: all 500ms ease;
+        }
+        .btn-6 span:after {
+            right: 0;
+            bottom: 0;
+            width: 0%;
+            height: .5px;
+            transition: all 500ms ease;
+        }
+        .btn-6 span:hover:before {
+            width: 100%;
+        }
+        .btn-6 span:hover:after {
+            width: 100%;
+        }
+        .logo {
+            max-width: 400px;
+            height: auto;
+            margin-bottom: 30px;
+        }
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+			z-index: 1000;
+            background: linear-gradient(90deg, #FF4136, #85144b);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .logout-btn:hover {
+            background: linear-gradient(90deg, #FF6E40, #B71C1C);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <form method="post" action="{% url 'spy:logout' %}">
+		{% csrf_token %}
+		<button type="submit" class="logout-btn">Logout</button>
+	</form>
+    <video id="video-background" autoplay loop muted>
+        <source src="{% static 'videos/6964235.mp4' %}?v=1" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="content">
+        <img src="{% static 'images/spy-logo.png' %}" alt="Logo" class="logo">
+        <h1>Welcome to Shellcode Search</h1>
+        <div class="button-container">
+            <a href="{% url 'spy:web_shellcodes' %}" class="custom-btn btn-6"><span>Web Shellcodes</span></a>
+            <a href="{% url 'spy:linux_shellcodes' %}" class="custom-btn btn-6"><span>Linux Shellcodes</span></a>
+            <a href="{% url 'spy:windows_shellcodes' %}" class="custom-btn btn-6"><span>Windows Shellcodes</span></a>
+        </div>
+    </div>
+
+    <script>
+        // 동영상 캐시 갱신을 위한 JavaScript 코드
+        function refreshVideo() {
+            var video = document.getElementById('video-background');
+            var source = video.getElementsByTagName('source')[0];
+            var currentSrc = source.src;
+            var newSrc = currentSrc.split('?')[0] + '?v=' + new Date().getTime();
+            source.src = newSrc;
+            video.load();
+        }
+
+        // 2분30초마다 동영상 캐시 갱신
+        setInterval(refreshVideo, 150000);
+    </script>
+</body>
+</html>
+
+
+
+

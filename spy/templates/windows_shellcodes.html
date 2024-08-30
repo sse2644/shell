@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Shellcodes</title>
+    <style>
+        body {
+            background-color: #000000;
+            background-image: 
+                linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.4;
+            z-index: -1;
+            background-image: url("{% static 'images/spy-green-logo.png' %}");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 55%;
+        }
+        h1 {
+            text-align: center;
+            text-shadow: 0 0 10px #00ff00;
+            font-size: 2.5em;
+            letter-spacing: 2px;
+        }
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            background-color: #0a0a0a;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 10px;
+            width: 300px;
+            font-family: 'Courier New', monospace;
+        }
+        button {
+            background-color: #00ff00;
+            border: none;
+            color: #000000;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #000000;
+            color: #00ff00;
+            box-shadow: 0 0 15px #00ff00;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: rgba(10, 10, 10, 0.8);
+            border: 1px solid #00ff00;
+            margin-bottom: 10px;
+            padding: 15px;
+            box-shadow: 0 0 5px #00ff00;
+            transition: all 0.3s ease;
+        }
+        li:hover {
+            box-shadow: 0 0 15px #00ff00, 0 0 15px #00ff00 inset;
+        }
+        strong {
+            color: #00ffff;
+            font-size: 1.1em;
+        }
+        p {
+            margin-top: 10px;
+        }
+        a {
+            color: #00ffff;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            border: 1px solid #00ffff;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            background-color: #00ffff;
+            color: #000000;
+            box-shadow: 0 0 15px #00ffff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Windows Shellcodes</h1>
+
+    <form method="GET">
+        <input type="text" name="q" placeholder="Search Windows Shellcodes..." value="{{ request.GET.q }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <ul>
+        {% for result in results %}
+            <li>
+                <strong>{{ result.title }}</strong> - {{ result.file_type }}
+                <p>{{ result.content }}</p>
+            </li>
+        {% empty %}
+            <li>No results found.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'spy:index' %}">Back to Home</a>
+</body>
+</html>

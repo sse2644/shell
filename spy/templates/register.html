@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - SPY 팀 Shell 프로젝트</title>
+    <script src='https://www.google.com/recaptcha/api.js' async defer></script>
+    <style>
+        /* 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .register-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            width: 100%;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            width: 90%;
+            margin-top: 1rem;
+        }
+        /* reCAPTCHA 스타일 */
+        .g-recaptcha {
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h2>회원가입</h2>
+        <form method="post" action="{% url 'spy:register' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">이름(실명):</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">이메일:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">비밀번호 (8자리 이상, 영어 대소문자, 숫자, 기호 포함):</label>
+                <input type="password" id="password" name="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}" title="비밀번호는 8자리 이상이며, 영어 대소문자, 숫자, 기호를 포함해야 합니다.">
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">비밀번호 확인:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            <!-- Google reCAPTCHA -->
+            <div class="g-recaptcha" data-sitekey="{{ GOOGLE_RECAPTCHA_SITE_KEY }}"></div>
+            <button type="submit" class="btn btn-primary">회원가입</button>
+        </form>
+        <a href="{% url 'spy:login' %}" class="btn btn-secondary">뒤로가기</a>
+    </div>
+</body>
+</html>
